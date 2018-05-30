@@ -1,0 +1,15 @@
+/*
+BlackJack is a fairly simple game. There are 52 cards in a standard deck.\nEach card has a value, and nothing is execused in the game.
+You have 2 options when playing, you can Stand or you can Hit.\n Hitting a card allows for you to get a card. Standing gives the dealer a card.
+Your goal is to have 21 points with the cards you obtained. However, if you\n have less than 21 points, you can allow the dealer to hit (standing)
+If you have more points then him when he plays you win. If not you loose.\n Simple right? Also there is gambling involved, you can opt out.
+If you gamble $50 you get 100 back if you win, or loose it all.
+Are you ready to play? [\"Y\" followed by enter key when ready]
+ */
+
+/*
+Made by Partick Saade
+Teacher Ms. Rioux
+Class AP CSA
+
+ */
