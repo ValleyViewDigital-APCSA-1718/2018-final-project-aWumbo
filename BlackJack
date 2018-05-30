@@ -1,0 +1,267 @@
+package com.company;
+
+import java.util.Scanner;
+
+public class BlackJack extends GameDriver {
+    /*
+    Instance variables
+    Initialization
+     */
+    private static Scanner sc = new Scanner(System.in);
+
+
+    /*
+    Sets up the game for BlackJack
+    This is the one for gambling with the dealer
+    Is the highest class right before the Driver
+    Fairly simple stuff
+    Not the game itself bu methods under are just the computations for determining the players desires
+    Are methods within methods
+     */
+    static void introScreen() {
+        /*
+        Instance Variables
+         */
+        String response = "";
+
+
+        /*
+        Welcome Screen
+         */
+        System.out.println("Hello & welcome to BlackJack JAVA EDITION!\nThis game has features such as money gambling, interaction with the dealer, and more!\n");
+        System.out.println("Would you like to learn how to play? [\"Y\" or \"N\" followed by enter key]");
+
+        response = sc.nextLine();
+
+        if (response.equals("Y")) {
+            learnToPlay();
+        }
+
+
+        /*
+        Reset response and new question
+        Checks for whether they want gambling or none
+         */
+        System.out.println("\n\n\nWould you like to play with gambling implemented? [\"Y\" or \"N\" followed by enter key]");
+        response = sc.nextLine();
+
+
+        /*
+        Checks for response
+         */
+        while (!response.equals("")) {
+            if (response.equals("Y")) {
+                gameSetup();
+                break;
+
+            } else if (response.equals("N")) {
+                gameSetupSingle();
+                break;
+
+            }
+            System.out.println("\n\n\nWould you like to play with gambling implemented? [\"Y\" or \"N\" followed by enter key]");
+            response = sc.nextLine();
+        }
+
+    }
+
+
+    /*
+    Instructions setup to teach how to play the game
+     */
+    private static void learnToPlay() {
+        /*
+        Instance variable
+         */
+        String response = "";
+
+
+        /*
+        Questions and help info
+         */
+        System.out.println("\n\nBlackJack is a fairly simple game. There are 52 cards in a standard deck.\nEach card has a value, and nothing is execused in the game.");
+        System.out.println("You have 2 options when playing, you can Stand or you can Hit.\n Hitting a card allows for you to get a card. Standing gives the dealer a card.");
+        System.out.println("Your goal is to have 21 points with the cards you obtained. However, if you\n have less than 21 points, you can allow the dealer to hit (standing)");
+        System.out.println("If you have more points then him when he plays you win. If not you loose.\n Simple right? Also there is gambling involved, you can opt out.");
+        System.out.println("If you gamble $50 you get 100 back if you win, or loose it all.");
+        System.out.println("Are you ready to play? [\"Y\" followed by enter key when ready]");
+
+
+        /*
+        Response checker
+         */
+        response = sc.nextLine();
+
+
+        /*
+        If response is not yes it will keep checking
+         */
+        while (!response.equals("Y")) {
+            System.out.println("Are you ready to play? [\"Y\" followed by enter key when ready]");
+            response = sc.nextLine();
+        }
+
+    }
+
+
+    /*
+    True game setups
+    This is where the code really gets set up
+    This class should have the most methods out of all the classes
+    One is for single player with no gambling o dealer
+    One is for multi player
+     */
+    private static void gameSetup() {
+        /*
+        Gambling & Dealer involved
+         */
+        boolean checkStatus = false;
+
+        DeckOfCards.deckOfCardsSetup();
+        DeckOfCards.shuffleDeck();
+
+        System.out.println("Game Has Started\n\n\n");
+        System.out.println("You are " + UserPlayer.whoAreYou());
+        System.out.println("The current value of your hand is " + GameMechanics.determineValueOfHand(UserPlayer.theHand) + " points.");
+        System.out.println("The current value of the dealer's hand is " + GameMechanics.determineValueOfHand(DealerPlayer.theHand) + " points.");
+        System.out.println("");
+
+        System.out.print("Your Cards: ");
+        GameMechanics.displayArray(GameMechanics.arrayListToArray(UserPlayer.theHand));
+
+        System.out.print("Dealer's Cards: ");
+        GameMechanics.displayArray(GameMechanics.arrayListToArray(DealerPlayer.theHand));
+
+        /*
+        How much gambled
+         */
+        System.out.println("\n\nHow much do you want to gamble?");
+        System.out.println("You currently have " + UserPlayer.money + " dollars and " + UserPlayer.cents + " cents.");
+
+        System.out.println("How many dollars do you want to gamble?\n");
+        int dollars = sc.nextInt();
+
+        System.out.println("How many cents do you want to gamble?\n");
+        int cents = sc.nextInt();
+
+
+        DealerPlayer.setUserGambledMoney(dollars, cents);
+        System.out.println("\nYou now have " + UserPlayer.money + " dollars and " + UserPlayer.cents + " cents.");
+
+
+        while (((GameMechanics.determineValueOfHand(UserPlayer.theHand) < 21) && (!checkStatus))) {
+            String response = "";
+            System.out.println("Type Hit to hit a card, Stand to stand, or End to end the game. Ending allows for you to determine the value of your Ace cards too.");
+            response = sc.nextLine();
+            switch (response) {
+                case "Hit":
+                    System.out.print("You were hit: ");
+                    System.out.println(UserPlayer.hitCard());
+                    System.out.println();
+                    System.out.println("Your hand value is " + GameMechanics.determineValueOfHand(UserPlayer.theHand));
+                    break;
+                case "Stand":
+                    if (GameMechanics.determineValueOfHand(UserPlayer.theHand)>0){
+                        while ((GameMechanics.determineValueOfHand(DealerPlayer.theHand) < 21) && !(GameMechanics.determineValueOfHand(DealerPlayer.theHand) > GameMechanics.determineValueOfHand(UserPlayer.theHand))) {
+                            if (GameMechanics.determineValueOfHand(DealerPlayer.theHand) > GameMechanics.determineValueOfHand(UserPlayer.theHand)) {
+                                checkStatus = true;
+                            }
+                            if (GameMechanics.determineValueOfHand(DealerPlayer.theHand) < 21) {
+                                System.out.print("Dealer has hit: ");
+                                System.out.println(DealerPlayer.hitCard());
+                                System.out.println();
+                                System.out.println("Dealer's hand value is " + GameMechanics.determineValueOfHand(DealerPlayer.theHand));
+                            } else {
+                                System.out.println("Dealer is over 21 in value already.");
+                            }
+                        }
+                        break;
+                    }
+                case "End":
+                    if (GameMechanics.determineValueOfHand(DealerPlayer.theHand) > 0) {
+                        checkStatus = true;
+                    } else {
+                        System.out.println("You cannot end right now!\n");
+                    }
+
+                    break;
+                default:
+                    System.out.println("That is not a valid command, try again.");
+                    break;
+            }
+        }
+        if (GameMechanics.determineValueOfHand(DealerPlayer.theHand) == 21) {
+            System.out.println("You Lose.");
+        } else if ((GameMechanics.determineValueOfHand(DealerPlayer.theHand) > GameMechanics.determineValueOfHand(UserPlayer.theHand)) && (GameMechanics.determineValueOfHand(DealerPlayer.theHand) <= 21)) {
+            System.out.println("You Lose.");
+        } else if (GameMechanics.determineValueOfHand(UserPlayer.theHand) > 21) {
+            System.out.println("You Lose.");
+        } else {
+            System.out.println("You Win!");
+            DealerPlayer.giveGambledMoney();
+        }
+
+        System.out.println("\nYou now have " + UserPlayer.money + " dollars and " + UserPlayer.cents + " cents.");
+        System.out.println("The current value of your hand is " + GameMechanics.determineValueOfHand(UserPlayer.theHand) + " points.");
+        System.out.println("The current value of the dealer's hand is " + GameMechanics.determineValueOfHand(DealerPlayer.theHand) + " points.");
+        System.out.print("Your hand is ");
+        GameMechanics.displayArray(GameMechanics.arrayListToArray(UserPlayer.theHand));
+        System.out.println();
+        System.out.print("Dealer's hand is ");
+        GameMechanics.displayArray(GameMechanics.arrayListToArray(DealerPlayer.theHand));
+
+
+        System.out.println("\n\nGame Over.\n\n\nWould you like to play again? [\"Y\" followed by enter key when ready or \"N\"]");
+
+
+    }
+
+
+    /*
+    Single player setup for the game
+     */
+    private static void gameSetupSingle() {
+        /*
+        No gambling or dealer
+         */
+        boolean checkStatus = false;
+
+        DeckOfCards.deckOfCardsSetup();
+        DeckOfCards.shuffleDeck();
+
+        System.out.println("Game Has Started\n\n\n");
+        System.out.println("You are " + NeutralPlayer.whoAreYou());
+        System.out.println("The current value of your hand is " + GameMechanics.determineValueOfHand(NeutralPlayer.theHand) + " points.");
+        while (((GameMechanics.determineValueOfHand(NeutralPlayer.theHand) < 21) && (!checkStatus))) {
+            String response = "";
+            System.out.println("Type Hit to hit a card, or End to end the game. Ending allows for you to determine the value of your Ace cards too.");
+            response = sc.nextLine();
+            switch (response) {
+                case "Hit":
+                    System.out.print("You were hit: ");
+                    System.out.println(NeutralPlayer.hitCard());
+                    System.out.println();
+                    System.out.println("Your hand value is " + GameMechanics.determineValueOfHand(NeutralPlayer.theHand));
+                    break;
+                case "End":
+                    checkStatus = true;
+                    break;
+                default:
+                    System.out.println("That is not a valid command, try again.");
+                    break;
+            }
+        }
+        System.out.println("Your Hand: ");
+        GameMechanics.displayArray(GameMechanics.arrayListToArray(NeutralPlayer.theHand));
+        System.out.println("");
+        if (GameMechanics.determineValueOfHand(NeutralPlayer.theHand) < 21) {
+            System.out.println("You Lose.");
+        } else if (GameMechanics.determineValueOfHand(NeutralPlayer.theHand) > 21) {
+            System.out.println("You Lose.");
+        } else {
+            System.out.println("You Win!!!");
+        }
+    }
+
+}
+
