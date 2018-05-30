@@ -1,0 +1,123 @@
+package com.company;
+
+import java.util.ArrayList;
+
+public class UserPlayer extends DealerPlayer implements GameInteractions, GamblingInteractions {
+    /*
+    Instance variables for the user
+    Is used by other classes like Dealer
+     */
+    static double money = 50;
+    static int dollars = 0, cents = 0;
+    static double gambledMoney = 0;
+
+    static String[] yourName = {"Sam", "Alex", "Isa", "Sidney", "Titan"};
+    static ArrayList<String> theHand = new ArrayList<>();
+
+
+    /*
+    Informs the player who they are
+    Overridden in the NeutralPlayer class
+     */
+    static String whoAreYou() {
+        String whoAreYou = null;
+
+        for (int count = 0; count < yourName.length; count++) {
+            count = (int) (Math.random() * 5);
+            whoAreYou = yourName[count];
+        }
+
+        return whoAreYou;
+    }
+
+
+    /*
+    Selects a random card for the user which is considered a hit
+    Uses a method within a method
+     */
+    static String hitCard() {
+        String card = "";
+        int column = (int) (Math.random() * 13);
+        int row = (int) (Math.random() * 4);
+
+        while (deckOfCards[column][row] == null) {
+            column = (int) (Math.random() * 13);
+            row = (int) (Math.random() * 4);
+        }
+
+        addToHand(deckOfCards[column][row]);
+
+        card = deckOfCards[column][row];
+        deckOfCards[column][row] = null;
+        return card;
+    }
+
+
+    /*
+    Adds a card to the hand of the user
+    Is called within method hitCard
+    Stand if the user wants dealer to play a card instead
+     */
+    private static void addToHand(String card) {
+        theHand.add(card);
+    }
+
+    static void standCard() {
+        DealerPlayer.hitCard();
+    }
+
+
+    /*
+    Setters and getters for the dollar, money, and cents.
+    Uses methods within each other
+    Are used in other classes
+     */
+    static void setDollars(int dollars) {
+        UserPlayer.dollars = dollars;
+    }
+
+    static int getDollars() {
+        if (dollars == 0) {
+            String getMoney = "" + getMoney();
+            int periodLocation = getMoney.indexOf(".");
+            getMoney = getMoney.substring(0, periodLocation);
+            UserPlayer.dollars = (int) Double.parseDouble(getMoney);
+        }
+
+        return UserPlayer.dollars;
+    }
+
+
+    static void setCents(int cents) {
+        UserPlayer.cents = cents;
+    }
+
+    static int getCents() {
+        String getMoney = "" + getMoney();
+        if (cents == 0) {
+            int periodLocation = getMoney.indexOf(".");
+            getMoney = getMoney.substring(periodLocation, periodLocation + 2);
+            double tempMoney = Double.parseDouble(getMoney) * 100;
+            UserPlayer.cents = (int) tempMoney;
+
+        }
+        return UserPlayer.cents;
+    }
+
+
+    static void setMoney(int dollars) {
+        UserPlayer.money = dollars;
+        UserPlayer.setDollars(dollars);
+    }
+
+    static void setMoney(int dollars, int cents) {
+
+        UserPlayer.money = dollars + (((double) cents) / 100);
+        setDollars(dollars);
+        setCents(cents);
+    }
+
+    private static double getMoney() {
+        return UserPlayer.money;
+    }
+}
