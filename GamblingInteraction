@@ -1,0 +1,42 @@
+package com.company;
+
+public interface GamblingInteractions {
+    /*
+    Static variables used for the money system
+     */
+    double money = 0;
+    int dollars = 0, cents = 0;
+
+
+    /*
+    Class composition displayed for the money dollar and cent setting and getting
+     */
+    static void setDollars(int dollars) {
+
+    }
+
+    static int getDollars() {
+        return dollars;
+    }
+
+
+    static void setCents(int cents) {
+
+    }
+
+    static int getCents() {
+        return cents;
+    }
+
+
+    static void setMoney(int dollars) {
+    }
+
+    static void setMoney(int dollars, int cents) {
+
+    }
+
+    static double getMoney() {
+        return money;
+    }
+}
