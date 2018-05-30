@@ -1,0 +1,52 @@
+package com.company;
+
+import java.util.ArrayList;
+
+public class NeutralPlayer extends UserPlayer implements GameInteractions {
+    /*
+    Instance variables
+     */
+    static ArrayList<String> theHand = new ArrayList<>();
+
+
+    /*
+    Determines who you are
+    Is overridden of the super class
+     */
+    static String whoAreYou() {
+        String whoAreYou = "no one";
+
+        return whoAreYou;
+    }
+
+
+    /*
+    Selects a random card for the user which is considered a hit
+    Uses a method within a method
+     */
+    static String hitCard() {
+        String card = "";
+        int column = (int) (Math.random() * 13);
+        int row = (int) (Math.random() * 4);
+
+        while (deckOfCards[column][row] == null) {
+            column = (int) (Math.random() * 13);
+            row = (int) (Math.random() * 4);
+        }
+
+        addToHand(deckOfCards[column][row]);
+        card = deckOfCards[column][row];
+        deckOfCards[column][row] = null;
+
+        return card;
+    }
+
+
+    /*
+    Adds a card to the hand of the user
+    Is called within method hitCard
+    */
+    private static void addToHand(String card) {
+        theHand.add(card);
+    }
+}
