@@ -1,0 +1,124 @@
+package com.company;
+
+
+/*
+Imported for reasons such as use of method, translation, and recording user data
+Scanner is important for ace class
+Imports an array so I save space instead of retyping it
+ */
+import java.util.ArrayList;
+import java.util.Scanner;
+import static com.company.DeckOfCards.face;
+
+public class GameMechanics extends BlackJack {
+    /*
+    Instance variables and initializations
+     */
+    private static int valueOfHand = 0;
+    private static Scanner sc = new Scanner(System.in);
+
+
+    /*
+    Converts an arrayList to an array
+    Very simple for loop and redeclaration
+     */
+    static String[] arrayListToArray(ArrayList<String> arrList) {
+        ArrayList<String> arrayList = new ArrayList<>(arrList);
+
+        String[] theHand = new String[arrayList.size()];
+
+        for (int count = 0; count < arrayList.size(); count++) {
+            theHand[count] = arrayList.get(count);
+        }
+
+        return theHand;
+    }
+
+
+    /*
+    Determines value of the player's hand
+    Uses parameters arrays and other objects to determine value of hand
+    Has method within method
+    Very complex uses many checks and balances for determining value of the Hand
+    First for loop is for the first 10 cards
+    The last for loop is for the last 3 cards
+    Then it is ran 13 times to check 52 times
+    The third if is to determine whether Ace is counted as 1 or 10
+     */
+    static int determineValueOfHand(ArrayList<String> hand) {
+        String[] theHand = arrayListToArray(hand);
+        valueOfHand = 0;
+        for (int count = 0; count < theHand.length; count++) {
+            for (int repeat = 0; repeat < 3; repeat++) {
+                for (int faceOfCard = 0; faceOfCard < face.length - 3; faceOfCard++) {
+                    if (theHand[count] != null) {
+                        if (theHand[count].contains(face[faceOfCard])) {
+                            valueOfHand += faceOfCard + 1;
+                            theHand[count] = null;
+                        } else {
+                            valueOfHand += 0;
+                        }
+                    }
+                }
+                for (int faceOfCard = 9; faceOfCard < face.length; faceOfCard++) {
+                    if (theHand[count] != null) {
+                        if (theHand[count].contains(face[faceOfCard])) {
+                            valueOfHand += 10;
+                            theHand[count] = null;
+                        } else {
+                            valueOfHand += 0;
+                        }
+                    }
+                }
+
+            }
+        }
+        return valueOfHand;
+    }
+
+
+    /*
+    If the user player has an ace or more it will prompt the user to determine its value as a 1 or a 10
+    Technically what it does is searches the array and then adds 9 to the total value of the user if chooses to make it worth 10
+    This is due because already 1 point is added
+     */
+    static void determineAceValue(ArrayList<String> hand) {
+        String[] theHand = arrayListToArray(hand);
+        int aceCount = 0;
+        String response = "";
+
+        for (String aTheHand : theHand) {
+            if (aTheHand.contains(face[0])) {
+                aceCount++;
+            }
+        }
+        if (aceCount != 0) {
+            System.out.println("You have " + aceCount + " Ace(s). Would you like to determine their values?\nAce(s) count as 1 by default.");
+            for (String aTheHand : theHand) {
+                if (aTheHand.contains(face[0])) {
+                    System.out.println("Your total value of hand is " + valueOfHand + ".\nWould you like the Ace(s) to be worth 10 points? [\"Y\" or \"N\" followed by enter key]");
+                    response = sc.nextLine();
+
+                    if (response.equals("Y")) {
+                        valueOfHand += 9;
+                    }
+                }
+            }
+        }
+
+        System.out.println("Your hand is now " + valueOfHand + " in value.");
+        //return valueOfHand;
+    }
+
+
+    /*
+    Prints the array for debugging purposes
+    This is used for the hand array
+     */
+    static void displayArray(String[] array) {
+        for (String anArray : array) {
+            System.out.println(anArray);
+        }
+    }
+
+}
