@@ -1,0 +1,33 @@
+package com.company;
+
+import java.util.ArrayList;
+
+public interface GameInteractions {
+    /*
+    Instance variables
+     */
+    ArrayList<String> theHand = new ArrayList<>();
+    String card = "";
+
+    /*
+    Methods used for cards hitting and standing cards
+    Who are you makes a fake persona for the player
+    Chooses between 3 names
+     */
+    static String whoAreYou() {
+        return null;
+    }
+
+    ;
+
+    static String hitCard() {
+        return card;
+    }
+
+    static void standCard() {
+    }
+
+    static void addToHand(String card) {
+    }
+
+}
