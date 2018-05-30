@@ -1,0 +1,65 @@
+package com.company;
+
+import java.util.Random;
+
+public class DeckOfCards extends GameMechanics {
+    /*
+    Below contains the 2D Array skeleton. It is used to layout the 52 cards. 13*4 = 52
+    One is not private because it is used in another class GameMechanics
+     */
+    static String[][] deckOfCards = new String[13][4];
+    static String[] face = {"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"};
+    private static String[] type = {"Clubs", "Diamonds", "Spades", "Hearts"};
+    private static String[] color = {"Black", "Red"};
+
+
+    /*
+    Below is the default setup of 52 the cards.
+    It was tricky to do because I had to make a 2D Array that has all the cards. Each card type is in 1 column distributed within all rows.
+    I combined the type and color of the card since they are the same amount. They use the same for loop as demonstrated below.
+    I modulate it to make it go between red and black cards
+    */
+    static void deckOfCardsSetup() {
+        for (int faceOfCard = 0; faceOfCard < 13; faceOfCard++) {
+            for (int colorAndTypeOfCard = 0; colorAndTypeOfCard < 4; colorAndTypeOfCard++) {
+                deckOfCards[faceOfCard][colorAndTypeOfCard] = color[(colorAndTypeOfCard % 2)] + " " + face[faceOfCard] + " of " + type[colorAndTypeOfCard];
+            }
+        }
+    }
+
+
+    /*
+    This shuffles the 2D array of the 52 cards
+    Makes the game more random I suppose
+    Selecting a card is random already but this helps
+     */
+    static void shuffleDeck() {
+        Random random = new Random();
+
+        for (int row = deckOfCards.length - 1; row > 0; row--) {
+            for (int column = deckOfCards[row].length - 1; column > 0; column--) {
+                int c = random.nextInt(row + 1);
+                int r = random.nextInt(column + 1);
+
+                String temp = deckOfCards[row][column];
+                deckOfCards[row][column] = deckOfCards[c][r];
+                deckOfCards[c][r] = temp;
+            }
+        }
+    }
+
+
+    /*
+    Below the method is ued for displaying the cards
+    It traverses the 2D Array of the 52 cards. It increments the column, then traverses all the rows in the column, then repeats.
+     */
+    public static void displayDeckOfCards() {
+        for (int row = 0; row < 4; row++) {
+            for (int column = 0; column < 13; column++) {
+                System.out.println(deckOfCards[column][row]);
+            }
+        }
+        System.out.println();
+    }
+
+}
