@@ -1,0 +1,76 @@
+package com.company;
+
+import java.util.ArrayList;
+
+public class DealerPlayer extends DeckOfCards implements GameInteractions, GamblingInteractions {
+    /*
+    Instance variables
+     */
+    static ArrayList<String> theHand = new ArrayList<>();
+    static double takenMoney = 0;
+
+
+    /*
+    Selects a random card for the user which is considered a hit
+    Uses a method within a method
+    Stand hits for itself and is accessed from the UserPayer class
+     */
+    static String hitCard() {
+        String card = "";
+
+        int column = (int) (Math.random() * 13);
+        int row = (int) (Math.random() * 4);
+
+        while (deckOfCards[column][row] == null) {
+            column = (int) (Math.random() * 13);
+            row = (int) (Math.random() * 4);
+        }
+
+        addToHand(deckOfCards[column][row]);
+
+        card = deckOfCards[column][row];
+        deckOfCards[column][row] = null;
+        return card;
+    }
+
+    static void standCard() {
+        DealerPlayer.hitCard();
+    }
+
+
+    /*
+    Adds a card to the hand of the user
+    Is called within method hitCard
+    This creates a list of cards for the Dealer
+    */
+    private static void addToHand(String card) {
+        theHand.add(card);
+    }
+
+
+    /*
+    Getters and setters for gambling money
+    This takes access from the UserPlayer class
+    It is methods from another class and methods within each other
+    Made sure encapsulation works properly
+     */
+    static void setUserGambledMoney(int dollars, int cents) {
+        UserPlayer.gambledMoney = dollars + (((double) cents) / 100);
+
+        UserPlayer.setDollars(UserPlayer.getDollars() - dollars);
+
+        UserPlayer.setCents(UserPlayer.getCents() - cents);
+
+        UserPlayer.setMoney(UserPlayer.getDollars(), UserPlayer.getCents());
+        takenMoney = dollars + (((double) cents) / 100);
+    }
+
+    private static double getUserGambledMoney() {
+        return UserPlayer.gambledMoney;
+    }
+
+    static void giveGambledMoney() {
+        UserPlayer.money = getUserGambledMoney() * 2;
+
+    }
+}
